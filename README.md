@@ -11,6 +11,25 @@
 
 3. run calibration script.
 
+TEST CAMERA CALIB WITH ARUCO
+sudo apt install ros-noetic-aruco-ros
+
+rosrun camera_calibration cameracalibrator.py --size 7x4 --square 0.35 image:=/usb_cam/image_raw/ 
+
+The GUI will show you the chessboard architecture with points and colors. It automatically saves images increasing different parameters: skew, size, x, y. When the software recognize a lot of different images (40 in my case), you are able to calibrate the camera and obtain the different matrices. Ther are saved as 'tar.gz' file in /tmp/ folder.
+
+(ost.yaml file is in the calibrationdata.tar.gz file saved during the calibraton process)
+
+> tar -xvzf calibrationdata.tar.gz -C /home/luca/Desktop/
+
+save it as head_camera into hidden '.ros/camera_info/' folder
+
+> mv head_camera.yaml /home/luca/.ros/camera_info/
+
+to test the calibrated camera info on ROS topics, launch the usb_cam package, then:
+
+> rostopic echo /usb_cam/camera_info
+
 ## USB Camera Images in ROS Environment
 
 First of all, you need to install the `usb_cam` package to have a ROS-compliant webcam (which publishes images in the ROS infrastructure).
