@@ -11,14 +11,15 @@
 
 3. run calibration script.
 
-TEST CAMERA CALIB WITH ARUCO
-sudo apt install ros-noetic-aruco-ros
+The calibration can be done with a ROS compliant tool.
 
-rosrun camera_calibration cameracalibrator.py --size 7x4 --square 0.35 image:=/usb_cam/image_raw/ 
+>rosrun camera_calibration cameracalibrator.py --size 7x4 --square 0.35 image:=/usb_cam/image_raw/
 
 The GUI will show you the chessboard architecture with points and colors. It automatically saves images increasing different parameters: skew, size, x, y. When the software recognize a lot of different images (40 in my case), you are able to calibrate the camera and obtain the different matrices. Ther are saved as 'tar.gz' file in /tmp/ folder.
 
-(ost.yaml file is in the calibrationdata.tar.gz file saved during the calibraton process)
+> ost.yaml file is in the calibrationdata.tar.gz file saved during the calibraton process
+
+To extract the file:
 
 > tar -xvzf calibrationdata.tar.gz -C /home/luca/Desktop/
 
@@ -29,6 +30,16 @@ save it as head_camera into hidden '.ros/camera_info/' folder
 to test the calibrated camera info on ROS topics, launch the usb_cam package, then:
 
 > rostopic echo /usb_cam/camera_info
+
+## Test Camera Calibration [ON HOLD]
+
+THIS PART IS ON HOLD SINCE IT WILL BE USE ONLY TO VERIFY CALIBRATION MATRIX.
+
+>sudo apt install ros-noetic-aruco-ros
+
+install aruco_ros package, then add the correct topic of your camera in the launch file.
+
+>         <remap from="/camera_info" to="/usb_cam/camera_info" />  <remap from="/image" to="/usb_cam/image_raw" />
 
 ## USB Camera Images in ROS Environment
 
@@ -42,7 +53,15 @@ First of all, you need to install the `usb_cam` package to have a ROS-compliant 
 4. While the camera is capturing data, you can run the basic script for object recognition (`object_recognition_yolo_ros`). You can use it as a skeleton for your own AI and computer vision applications.
    - **Note 1**: You need to install several libraries (e.g., `ultralytics`) using the Python package manager (PIP).
 
-### Rosserial
+## Position Estimation [UNDER DEVELOPMENT]
+
+Run camera using ROS launch file for usb_camera.
+
+> be sure to publish camera info under /usb_camera/camera_info/ topic
+
+Run 'object_recognition_position_estimation' script. For now it will give a fixed and fake 3D position.
+
+### Rosserial [FUTURE DEVELOPMENT for SENSOR CONTROL]
 
 rosserial temp workaround
 ros/msg.h file #include <cstring> no longer works, replace it with #include <string.h> and the std::memcpy() function is not a part of std anymore, so change it to memcpy().
